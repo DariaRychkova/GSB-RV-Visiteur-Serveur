@@ -69,6 +69,20 @@ def getPraticiens() :
 		reponse.status_code = 404
 	return reponse
 	
+@app.route( '/motifs' , methods = [ 'GET' ] )
+def getMotifs() :
+	motifs = modeleGSBRV.getMotifs()
+	
+	if motifs != None :
+		reponse = make_response( json.dumps( motifs ) )
+		reponse.mimetype = 'application/json'
+		reponse.status_code = 200
+	else :
+		reponse = make_response( '' )
+		reponse.mimetype = 'application/json'
+		reponse.status_code = 404
+	return reponse
+	
 @app.route( '/medicaments' , methods = [ 'GET' ] )
 def getMedicaments() :
 	medicaments = modeleGSBRV.getMedicaments()
@@ -108,7 +122,7 @@ def addEchantillonsOfferts( matricule , numRapport ) :
 	
 	reponse = make_response( '' )												
 	if numRapport != None :
-		reponse.headers[ 'Location' ] = '/rapports/echantillons/%s/%d' % ( unRapport[ 'matricule' ] , unRapport[ 'numero' ] )
+		reponse.headers[ 'Location' ] = '/rapports/echantillons/%s/%s' % ( matricule, numRapport )
 		reponse.status_code = 201
 	else :
 		reponse.status_code = 409

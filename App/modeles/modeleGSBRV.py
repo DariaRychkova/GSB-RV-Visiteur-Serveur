@@ -37,9 +37,10 @@ def seConnecter( matricule , mdp ) :
 					) 
 					and t1.tra_role <> 'Responsable'
 					and Visiteur.vis_matricule = %s
+					and Visiteur.vis_mdp = %s
 				'''
 
-		curseur.execute( requete , ( matricule , ) )
+		curseur.execute( requete , ( matricule , mdp ) )
 		
 		enregistrement = curseur.fetchone()
 		
@@ -153,6 +154,32 @@ def getPraticiens() :
 			
 		curseur.close()
 		return praticiens
+		
+	except :
+		return None
+		
+def getMotifs() :
+	
+	try :
+		curseur = getConnexionBD().cursor()
+		requete = '''
+					select mot_code , mot_libelle
+					from Motif
+				'''
+		
+		curseur.execute( requete , () )
+		
+		enregistrements = curseur.fetchall()
+		
+		motifs = []
+		for unEnregistrement in enregistrements :
+			unMotif = {}
+			unMotif[ 'pra_num' ] = unEnregistrement[ 0 ]
+			unMotif[ 'pra_nom' ] = unEnregistrement[ 1 ]
+			motifs.append( unMotif )
+			
+		curseur.close()
+		return motifs
 		
 	except :
 		return None
